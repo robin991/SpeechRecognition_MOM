@@ -1,3 +1,4 @@
+import streamlit as st 
 import whisper
 import openai
 import os
@@ -5,27 +6,27 @@ import sys
 import subprocess  
 from fastapi import FastAPI, File, UploadFile
 import aiofiles  
+from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_audio
+import moviepy.editor
+import tempfile
 from dotenv import load_dotenv
 import os
 
-'''
-Whisper : https://www.assemblyai.com/blog/how-to-run-openais-whisper-speech-recognition-model/
-Subprocess: https://www.datacamp.com/tutorial/python-subprocess
-openai.completion : https://platform.openai.com/docs/guides/gpt/chat-completions-vs-completions
-
-'''
 
 
+model = whisper.load_model("base")
 def congfigure ():
     # function to configure API key
     load_dotenv()
 
-
 def video_to_audio(video_file):
     audio_file = "input_audio.mp3"
-    subprocess.call(['ffmpeg',"-y","-i", video_file, audio_file],
-                    stdout = subprocess.DEVNULL,
-                    stderr = subprocess.STDOUT)
+    # subprocess.call(['ffmpeg',"-y","-i", video_file, audio_file],
+    #                 stdout = subprocess.DEVNULL,
+    #                 stderr = subprocess.STDOUT)
+    ffmpeg_extract_audio(video_file, audio_file)
+    #video = moviepy.editor.VideoFileClip(video_file)
+    #audio = video.audio
     return audio_file
 
 def audio_to_transcript(audio_file):
@@ -43,14 +44,25 @@ def MOM_generation(prompt):
     
     return  reponse['choices'][0]['text']
 
-
+# configure api key
 congfigure()
 openai.api_key = os.getenv('api_key')
 
-model = whisper.load_model("base")
+# main title of the application
+st.title('MOM Solution')
 
-audio_file = video_to_audio('ELON MUSK on How to manage companies better 2020.mp4')
-transcript = audio_to_transcript(audio_file)
-final_result = MOM_generation(transcript)
+# upload video
+video_file = st.file_uploader("Video",type = ['mp4'])
+#tfile = tempfile.NamedTemporaryFile(delete=False)
+#tfile.write(video_file.read())
 
-print(final_result)
+if video_file:
+    st.video(video_file)
+      
+    audio_file = video_to_audio(video_file.name)
+    transcript = audio_to_transcript(audio_file)
+    final_result = MOM_generation(transcript)
+    st.write("This is the output transcript")
+    st.write(final_result)
+else:
+    st.warning("Upload Video File")
