@@ -1,14 +1,14 @@
 import streamlit as st 
 import whisper
 import openai
-import os
-import sys 
-import subprocess  
-from fastapi import FastAPI, File, UploadFile
-import aiofiles  
+#import os
+#import sys 
+#import subprocess  
+#from fastapi import FastAPI, File, UploadFile
+#import aiofiles  
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_audio
-import moviepy.editor
-import tempfile
+#import moviepy.editor
+#import tempfile
 from dotenv import load_dotenv
 import os
 
