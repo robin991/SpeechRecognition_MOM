@@ -1,0 +1,6 @@
+openai-whisper
+openai
+moviepy
+streamlit
+dotenv
+os
