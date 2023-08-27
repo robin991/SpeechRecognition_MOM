@@ -46,7 +46,7 @@ def MOM_generation(prompt):
 
 # configure api key
 congfigure()
-openai.api_key = st.secrets['api_key]
+openai.api_key = st.secrets['api_key']
 
 # main title of the application
 st.title('MOM Solution')
