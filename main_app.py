@@ -50,6 +50,8 @@ video_file = st.file_uploader("Video",type = ['mp4'])
 #tfile = tempfile.NamedTemporaryFile(delete=False)
 #tfile.write(video_file.read())
 
+st.write("[Sample video download link]()")
+
 if video_file:
     st.video(video_file)
       
